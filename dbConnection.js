@@ -5,7 +5,7 @@ var connect = mysql.createConnection({
     user: "kett"
 });
 
-con.connect(function(err) {
+connect.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 });
