@@ -1,16 +1,26 @@
 <?php
-      //  include('dbConnection.php');
+    //  include('dbConnection.php');
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $team_url = "https://statsapi.web.nhl.com/api/v1/teams";
         $team_json = file_get_contents($team_url);
         $team_array = json_decode($team_json, true);
         
-    for($i = 1; $i <= 30; $i++) {
-       // $query = "INSERT INTO team (conferenceName, divisionName, idNumber, locName, teamName) VALUES ('$nextTeam['locationName']', '$nextTeam['division']['name']', '$nextTeam['id']', '$nextTeam['locationName']', '$nextTeam['teamName']')";
-                echo $team_array['teams'][$i]['name'];
+        for($i = 1; $i <= 30; $i++) {
+            $query = "INSERT INTO team (conferenceName, divisionName, idNumber, locName, teamName) VALUES ('$nextTeam['locationName']', '$nextTeam['division']['name']', '$nextTeam['id']', '$nextTeam['locationName']', '$nextTeam['teamName']')";
+
+            //Test
+            //echo $team_array['teams'][$i]['name'];
+
+            $runQuery = mysqli_query($connection, $query);
+
+            if($runQuery) 
+                echo "<br>Team added.";
+            else 
+                echo "<br>ERROR: Team not added.";
+        }
+    
     }
-}
   
 ?>
 
