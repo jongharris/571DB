@@ -1,5 +1,5 @@
 <?php
-    //  include('dbConnection.php');
+    include('/var/www/dbConnection.php');
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $team_url = "https://statsapi.web.nhl.com/api/v1/teams";
@@ -11,7 +11,7 @@
             $query = "INSERT into teams (idteams, teamName, location, division, conference) VALUES ('$nextTeam['id']','$nextTeam['teamName']','$nextTeam['locationName']','$nextTeam['division']['name']','$nextTeam['conference']['name']')"
 
             //Test
-            //echo $team_array['teams'][$i]['name'];
+            echo $team_array['teams'][$i]['name'];
 
             $runQuery = mysqli_query($connection, $query);
 
