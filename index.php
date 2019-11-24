@@ -7,7 +7,8 @@
         $team_array = json_decode($team_json, true);
         
         for($i = 1; $i <= 30; $i++) {
-            $query = "INSERT INTO team (idteams, conferenceName, divisionName, locName, teamName) VALUES ('$nextTeam['id']', '$nextTeam['locationName']', '$nextTeam['division']['name']', '$nextTeam['locationName']', '$nextTeam['teamName']')";
+            
+            $query = "INSERT into teams (idteams, teamName, location, division, conference) VALUES ('$nextTeam['id']','$nextTeam['teamName']','$nextTeam['locationName']','$nextTeam['division']['name']','$nextTeam['conference']['name']')"
 
             //Test
             //echo $team_array['teams'][$i]['name'];
