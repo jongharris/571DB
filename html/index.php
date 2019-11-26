@@ -9,9 +9,9 @@
         for($i = 0; $i <= 30; $i++) {
             $nextTeam = $team_array['teams'][$i];
 
-            $query = "INSERT into NHLapiDB.teams (idteams, teamName, location, division, conference) VALUES ("
+            $query = "INSERT into NHLapiDB.teams (idteams, teamName, location, division, conference, acronym) VALUES ("
             .$nextTeam['id'].",'".$nextTeam['teamName']."','".$nextTeam['locationName']."','".$nextTeam['division']['name']
-            ."','".$nextTeam['conference']['name']."');";
+            ."','".$nextTeam['conference']['name']."','".$nextTeam['abbreviation']."');";
 
           //Test
             echo $query."<br>";
