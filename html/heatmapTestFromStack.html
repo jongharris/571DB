@@ -10,18 +10,16 @@
     <canvas width="1024" height="742" style="position:absolute; left: 0; top: 0"></canvas>
   </div>
 </body>
-THIS IS WHERE THE MAP HEATMAP STARTS
-<br>
 <script> 
-var heatmap = h337.create({
-  container: domElement
-});
+  var heatmapInstance = h337.create({
+    container: document.getElementById('heatMap')
+  });
 
-heatmap.setData({
-  max: 5,
-  data: [{ x: 10, y: 15, value: 5}, ...]
-});
+  var testData = {
+        min: 0,
+        max: 100,
+        data: [{x: 807, y: 583, value: 65}, {x: 597, y: 285, value: 51}, {x: 217, y: 449, value: 73}, {x: 377, y: 656, value: 58}, {x: 467, y: 509, value: 47}, {x: 487, y: 164, value: 46}, {x: 247, y: 194, value: 35}]
+  };
+  heatmapInstance.setData(testData);  
 </script>
-<br>
-THIS IS WHERE THE HEATMAP ENDS
 </html>
