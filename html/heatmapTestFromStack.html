@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Heatmap Test Code</title>
+<script src='http://www.patrick-wied.at/static/heatmapjs/assets/js/heatmap.min.js'></script>
+</head>
+<body>
+  <div id='heatMap' style="height: 742px">
+    <canvas width="1024" height="742" style="position:absolute; left: 0; top: 0"></canvas>
+  </div>
+</body>
+THIS IS WHERE THE MAP HEATMAP STARTS
+<br>
+<script> 
+var heatmap = h337.create({
+  container: domElement
+});
+
+heatmap.setData({
+  max: 5,
+  data: [{ x: 10, y: 15, value: 5}, ...]
+});
+</script>
+<br>
+THIS IS WHERE THE HEATMAP ENDS
+</html>

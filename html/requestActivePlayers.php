@@ -5,8 +5,6 @@
         $team_json = file_get_contents($team_url);
         $team_array = json_decode($team_json, true);
         
-      //  echo $team_array['teams'][0]['roster']['roster'][0]['person']['fullName'];
-        
         //Outer loop iterates through the teams
         //Note that i is NOT the ID for a team as some teams have ID's in the 50's
         //Note look up sizeOf for array bounds
@@ -36,12 +34,13 @@
                     for($j = 0; $j < sizeOf($players) && $add; $j++) {
                         //Check if already active on team
                         if ($team_array['teams'][$i]['roster']['roster'][$k]['person']['id'] == $players[$j] ) {
-                            echo "found ".$players[$j];
+                            //echo "found ".$players[$j];
 							$players[$j] = NULL;
                             $add = FALSE;
-                        } 
+                        }
                         
                     } 
+					if($add) echo $team_array['teams'][$i]['roster']['roster'][$k]['person']['lastName']."not found"."<br>";
 					
 					//Those not active or on correct team are corrected or created if not in DB
                     if($add) {
@@ -52,7 +51,7 @@
 						if (mysqli_num_rows($runQuery)>0){
 							$query = "UPDATE NHLapiDB.players SET active = TRUE, currentTeam = ".$currentID." WHERE idplayers = "
 								.$team_array['teams'][$i]['roster']['roster'][$k]['person']['id'].";";
-							//echo $query."<br>";
+							echo $query."<br>";
 							$runQuery = mysqli_query($connection, $query);
 						}else{
 							$player_url = "https://statsapi.web.nhl.com/api/v1/people/".$team_array['teams'][$i]['roster']['roster'][$k]['person']['id'];
@@ -67,7 +66,7 @@
 							.($player_stuff['people'][0]['rookie'] ? 'true' : 'false').", true, ".$currentID
 							.", ".$player_stuff['people'][0]['primaryNumber'].", '".$player_stuff['people'][0]['primaryPosition']['abbreviation']."');";
 							
-							//echo $query."<br>";
+							echo $query."<br>";
 							$runQuery = mysqli_query($connection, $query);
 							if(!$runQuery)
 								echo "unsuccessful";
@@ -79,7 +78,7 @@
             for ($s = 0; $s < sizeOf($players); $s++) {
                 if ($players[$s]){
 					$query = "UPDATE NHLapiDB.players SET active = FALSE WHERE idplayers = ".$players[$s].";";
-					//echo $query."<br>";
+					echo $query."<br>";
 					$runQuery = mysqli_query($connection, $query);
 				}
             }
