@@ -170,10 +170,13 @@ function addGameData($connection, $gid){
 
 	//flag to capture if a goal is a penalty shot
 	$penaltyShot = -2;
-		
+	$home = $game_array['gameData']['teams']['home']['id'];
+	//homeStartsLeft boolean
+	$hSL = ($linescore['periods'][0]['home']['rinkSide']=="left");
 	//big loop creates a specific query for each event type in switch statement
 	//after the switch executes the query if one exists for that event
 	foreach($game_array['liveData']['plays']['allPlays'] as $event){
+		$coordMod = (($hSL)?1:-1) * (($event['team']['id']==$home)?1:-1) * (($event['about']['period']!=2)?1:-1);
 		switch($event["result"]["event"]) {
 			case "Goal":
 				$scorer = "NULL";
@@ -200,7 +203,7 @@ function addGameData($connection, $gid){
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].", '00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
 					.$scorer.", ".$assist1.", ".$assist2.", ".$goalie.", ".$event['team']['id'].", ".(($event['result']['strength']['code']=='PPG')? 'true' : 'false').", "
 					.(($event['about']['eventIdx']==$penaltyShot)? 'true' : 'false').", ".(($event['result']['strength']['code']=='SHG')? 'true' : 'false').", "
-					.$event['coordinates']['x'].", ".$event['coordinates']['y'].", '".$event['result']['secondaryType']."', "
+					.$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.", '".$event['result']['secondaryType']."', "
 					.(($event["about"]["period"]==5)? 'true':'false').");";		
 				break;
             
@@ -214,7 +217,7 @@ function addGameData($connection, $gid){
 						$goalie = $player['player']['id'];
 				$query = "INSERT INTO NHLapiDB.shots (game, eventIdx, time, period, shooter, goalie, team, xposition, yposition, shotType, shootout) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].", '00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$shooter.", ".$goalie.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].", '"
+					.$shooter.", ".$goalie.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.", '"
 					.$event['result']['secondaryType']."', ".(($event["about"]["period"]==5)? 'true':'false').");";
 				break;
 			
@@ -228,7 +231,7 @@ function addGameData($connection, $gid){
 						$blocker = $player['player']['id'];
 				$query = "INSERT INTO NHLapiDB.blockedShots (game, eventIdx, time, period, shooter, blocker, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$shooter.", ".$blocker.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");";
+					.$shooter.", ".$blocker.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");";
 				break;
 			
 			case "Faceoff":
@@ -241,14 +244,14 @@ function addGameData($connection, $gid){
 						$loser = $player['player']['id'];
 				$query = "INSERT INTO NHLapiDB.faceoffs (game, eventIdx, time, period, winner, loser, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$winner.", ".$loser.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");";
+					.$winner.", ".$loser.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");";
 				break;
 			
 			case "Missed Shot":
 				$shooter = $event[players][0]['player']['id'];
 				$query = "INSERT INTO NHLapiDB.missedShots (game, eventIdx, time, period, shooter, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$shooter.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");"; 
+					.$shooter.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");"; 
 				break;
 			
 			case "Penalty":
@@ -273,14 +276,14 @@ function addGameData($connection, $gid){
 				$taker = $event[players][0]['player']['id'];
 				$query = "INSERT INTO NHLapiDB.takeaway (game, eventIdx, time, period, taker, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$taker.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");";
+					.$taker.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");";
 				break;
 			
 			case "Giveaway":
 				$giver = $event[players][0]['player']['id'];
 				$query = "INSERT INTO NHLapiDB.giveaway (game, eventIdx, time, period, giver, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$giver.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");";
+					.$giver.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");";
 				break;
 			
 			case "Hit":
@@ -293,7 +296,7 @@ function addGameData($connection, $gid){
 						$hittee = $player['player']['id'];
 				$query = "INSERT INTO NHLapiDB.hits (game, eventIdx, time, period, hitter, hittee, team, xposition, yposition) VALUES ( "
 					.$game_array['gamePk'].", ".$event['about']['eventIdx'].",'00:".$event['about']['periodTime']."', ".$event['about']['period'].", "
-					.$hitter.", ".$hittee.", ".$event['team']['id'].", ".$event['coordinates']['x'].", ".$event['coordinates']['y'].");";
+					.$hitter.", ".$hittee.", ".$event['team']['id'].", ".$event['coordinates']['x']*$coordMod.", ".$event['coordinates']['y']*$coordMod.");";
 				break;
 			
 			default:
