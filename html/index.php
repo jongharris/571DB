@@ -1,32 +1,18 @@
 <?php
+	ini_set('max_execution_time', 0);
     include('/var/www/dbConnection.php');
+	include('/var/www/html/apiFunctions.php');
 
-	if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $team_url = "https://statsapi.web.nhl.com/api/v1/teams";
-        $team_json = file_get_contents($team_url);
-        $team_array = json_decode($team_json, true);
-
-        for($i = 0; $i <= 30; $i++) {
-            $nextTeam = $team_array['teams'][$i];
-
-            $query = "INSERT into NHLapiDB.teams (idteams, teamName, location, division, conference) VALUES ("
-            .$nextTeam['id'].",'".$nextTeam['teamName']."','".$nextTeam['locationName']."','".$nextTeam['division']['name']
-            ."','".$nextTeam['conference']['name']."');";
-
-          //Test
-            echo $query."<br>";
-
-            $runQuery = mysqli_query($connection, $query);
-
-           if($runQuery){
-             echo "Team added.";
-           }else{
-             echo "ERROR: Team not added.";
-           }
-        }
-
-    }
-
+	if (isset($_POST['AddAllActiveTeams'])) {
+		addAllTeams($connection);
+    }elseif (isset($_POST['AddAllActivePlayers'])) {
+		addAllActivePlayers($connection);
+    }elseif (isset($_POST['AddGameData'])) {
+		removeGameData($connection, $_POST["gameNumber"]);
+		addGameData($connection, $_POST["gameNumber"]);
+	}elseif (isset($_POST['AddGamesSince'])){
+		addGamesSince($connection, $game);
+	}
   
 ?>
 
@@ -36,13 +22,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Pull From API</title>
 </head>
 <body>
    
    <form method = "post" action = "<?php echo $_SERVER['PHP_SELF'];?>">
-       <button type = "submit"> Request Teams </button>
-   </form>
+       <button class = "button" type = "submit" name = "AddAllActiveTeams" value = "AddAllActiveTeams">
+	   Request Teams </button>
+   </form><br>
+   <form method = "post" action = "<?php echo $_SERVER['PHP_SELF'];?>">
+       <button class = "button" type = "submit" name = "AddAllActivePlayers" value = "AddAllActivePlayers">
+	   Add All Active Players </button>
+   </form><br>
+   <form method = "post" action = "<?php echo $_SERVER['PHP_SELF'];?>">
+		Game Number <input type="text" name="gameNumber"><br>
+       <button class = "button" type = "submit" name = "AddGameData" value = "AddGameData">
+		Get Game </button>
+   </form><br>
+   <form method = "post" action = "<?php echo $_SERVER['PHP_SELF'];?>">
+		Game Number <input type="text" name="gameNumber"><br>
+       <button class = "button" type = "submit" name = "AddGamesSince" value = "AddGamesSince">
+		Get Games Since </button>
+   </form><br>
 <!--    <button id="retrievePlayers" onclick= "requestAllActivePlayers()">Request all Active Players</button>-->
 <!--    <button id="retrieveTeams" onclick= "requestAllTeams()">Request all Teams</button>-->
 
