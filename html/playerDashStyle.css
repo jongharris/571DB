@@ -93,13 +93,28 @@ body {
     height: 90%;
     width: 100%;
     margin-left: 50px;
+    
 }
 
 .playerCard {
+    display: flex;
+    justify-content: center; 
+    flex-flow: wrap;
     background-color: #FFFFFF;
     color: #64696F;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    width: 40%;
-    height: 100px;
-    
+    width: 25%;
+    height: 150px;
+}
+
+.playerCardName {
+    color: white;
+    text-align: center; 
+    background-color: #313A46;
+    height: 40%;
+    width: 100%;
+}
+
+.playerCardDetails {
+        
 }
