@@ -21,7 +21,7 @@
         //The query to grab the team name
         $queryTeam = "Select teamName from NHLapiDB.teams WHERE idteams = ".$resultPlayer['currentTeam']."";
         $run_queryTeam = mysqli_query($connection, $queryTeam);
-        $resultTeam = mysqli_fetch_assoc($runQueryTeam)
+        $resultTeam = mysqli_fetch_assoc($runQueryTeam);
         
     }
         
@@ -60,14 +60,11 @@
                 <div class = "playerInfo">
                     <div class = "playerCard">
                         <div class = "playerCardName">
-<!--                        <h3> Patrick Kane | 88</h3>-->
                         <?php
                        if ($resultPlayer) {
-                            
-                            
                         ?>
 
-                         <h3> <?php echo $resultPlayer['fName'] . " " . $result['lName'] . " | " . $resultPlayer['primeNumber']?> </h3>
+                         <h3> <?php echo $resultPlayer['fName']." ".$resultPlayer['lName']." | ".$resultPlayer['primeNumber'];?> </h3>
                        
                         </div>
                         
