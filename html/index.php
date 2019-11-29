@@ -17,7 +17,7 @@
 		addGamesSince($connection, $game);
 	}elseif (isset($_POST['GetGoals'])){
 		//$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE scorer = ".$_POST["playerNumber"]." AND shootout=false;";
-		$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE shootout=false AND shotType='Tip-In';";
+		$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE shootout=false AND shotType='Wrist Shot';";
 		$runQuery = mysqli_query($connection, $query);
 		if(!$runQuery)
 			echo "unsuccessful"."<br>".$query."<br>";
@@ -25,7 +25,6 @@
 			while ($result = mysqli_fetch_assoc($runQuery)){
 				array_push($xpoints, $result['x']);
 				array_push($ypoints, $result['y']);
-				echo $result['x'].", ".$result['y']."<br>";
 			}
 		}
 	}
@@ -91,7 +90,7 @@
 
 	var testData = {
 		min: 0,
-        max: 30,
+        max: 100,
        data: dataPoints
 	};
 	heatmapInstance.setData(testData);  
