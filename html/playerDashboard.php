@@ -24,16 +24,41 @@
         $run_queryTeam = mysqli_query($connection, $queryTeam);
         $resultTeam = mysqli_fetch_assoc($run_queryTeam);
 		
-		
-		$queryGoalsHeat = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE scorer = "
+		//***Heat Map Queries***//
+		$xpoints = array();
+		$ypoints = array();
+		$xpoints2 = array();
+		$ypoints2 = array();
+		//Faceoffs
+		//$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.faceoffs;";
+		//Goals
+		$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
 			.$resultPlayer['idplayers']." AND shootout=false;";
-		$runQueryGoalsHeat = mysqli_query($connection, $queryGoalsHeat);
-		if(!$runQueryGoalsHeat)
+			
+		//Shots
+		$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
+			.$resultPlayer['idplayers']." AND shootout=false;";
+		$queryHeat2 = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.shots WHERE shooter = "
+			.$resultPlayer['idplayers']." AND shootout=false;";
+		$runqueryHeat2 = mysqli_query($connection, $queryHeat2);
+		if(!$runqueryHeat2)
 			echo "error";
 		else
-			$xpoints = array();
-			$ypoints = array();
-			while ($result = mysqli_fetch_assoc($runQueryGoalsHeat)){
+			while ($result = mysqli_fetch_assoc($runqueryHeat2)){
+				array_push($xpoints2, $result['x']);
+				array_push($ypoints2, $result['y']);
+			}
+		
+		//Shot Attempts
+
+		//$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
+		//	.$resultPlayer['idplayers']." AND shootout=false;";
+		
+		$runqueryHeat = mysqli_query($connection, $queryHeat);
+		if(!$runqueryHeat)
+			echo "error";
+		else
+			while ($result = mysqli_fetch_assoc($runqueryHeat)){
 				array_push($xpoints, $result['x']);
 				array_push($ypoints, $result['y']);
 			}        
@@ -120,7 +145,16 @@
 
 <script> 
 	var heatmapInstance = h337.create({
-		container: document.getElementById('heatMap')
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.85,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#AA0000',
+			'.6': '#FF0000',
+			'.3': '#FFAAAA',
+			'.01': 'white'
+		}
 	});
 
 	var xPoints = <?php echo '["' . implode('", "', $xpoints) . '"]' ?>;
@@ -131,15 +165,49 @@
 
 	dataPoints = [];
 	for(var i=0; i<xPoints.length; i++){
-		dataPoints.push({x: (parseFloat(xPoints[i])+100)*4, y: (parseFloat(yPoints[i])+42.5)*4, value: 1});
+		dataPoints.push({x: (parseFloat(xPoints[i])+100)*2.4, y: (parseFloat(yPoints[i])+42.5)*2.4, value: 1});
 	}
 	console.log(dataPoints);
 
 	var testData = {
 		min: 0,
-        max: 4,
-       data: dataPoints
+        max: 1,
+		data: dataPoints
 	};
-	heatmapInstance.setData(testData);  
+	heatmapInstance.setData(testData);
+
+
+	var heatmapInstance2 = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.5,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#0000AA',
+			'.6': '#0000FF',
+			'.3': '#AAAAFF',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints2 = <?php echo '["' . implode('", "', $xpoints2) . '"]' ?>;
+	var yPoints2 = <?php echo '["' . implode('", "', $ypoints2) . '"]' ?>;
+
+	console.log(xPoints2);
+	console.log(yPoints2);
+
+	dataPoints2 = [];
+	for(var i=0; i<xPoints2.length; i++){
+		dataPoints2.push({x: (parseFloat(xPoints2[i])+100)*2.4, y: (parseFloat(yPoints2[i])+42.5)*2.4, value: 1});
+	}
+	console.log(dataPoints2);
+
+	var testData2 = {
+		min: 0,
+        max: 3,
+       data: dataPoints2
+	};
+	heatmapInstance2.setData(testData2);
+	
 </script>
 </html>
