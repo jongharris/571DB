@@ -18,14 +18,15 @@
                   <h2> Search by:        <button id = "team">
                      Teams
                  </button> 
-                  <button id = "player">
+
+                  <button id = "player onclick="window.location.href = 'http://99.79.32.21/playerDashboard.php';>
+
                      Players
                  </button>
                  </h2>
             </div>
             <div class ="buttonArea">
-                <div class = "buttonContainer">
-                
+
                  </div>
                  <div class = "buttonContainer">
                
