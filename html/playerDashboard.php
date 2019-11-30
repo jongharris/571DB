@@ -9,6 +9,7 @@
         
         //clean data
         $raw_playerName = str_replace(".", "%", $raw_playerName);
+		$raw_playerName = str_replace(" ", "%", $raw_playerName);
         $raw_playerName = trim($raw_playerName);
         $playerName = filter_var($raw_playerName, FILTER_SANITIZE_STRING);
         $playerName = "%".$playerName."%";
@@ -63,11 +64,8 @@
                         <?php
                        if ($resultPlayer) {
                         ?>
-
                          <h3> <?php echo $resultPlayer['fName']." ".$resultPlayer['lName']." | ".$resultPlayer['primeNumber'];?> </h3>
-                       
                         </div>
-                        
 <!--                        Note: ٠ -->
                     <?php
                        }
@@ -79,8 +77,18 @@
                            
                         </div>
                     </div>
+					<br>
+					<div class="playerCard">
+						<div class="heatmap" name="playerGoals">
+				
+				
+				
+						</div>
+					</div>
                         
                 </div>
+				
+				
             </div>
         </div>
     </div>
