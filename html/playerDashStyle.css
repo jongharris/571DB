@@ -93,6 +93,7 @@ body {
     height: 90%;
     width: 100%;
     margin-left: 50px;
+	justify-content: space-between;
     
 }
 
@@ -117,4 +118,21 @@ body {
 
 .playerCardDetails {
         
+}
+
+.heatmapCard{
+	display: flex;
+    justify-content: center; 
+    flex-flow: wrap;
+    color: #64696F;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    width: 50%;
+    height: width*(17/40);
+	background-image: url(./hockey-rink-drawing-30.png);
+}
+
+.heatmap{
+	background-image: url(./hockey-rink-drawing-30.png);
+	height: 95%
+	width: 95%
 }

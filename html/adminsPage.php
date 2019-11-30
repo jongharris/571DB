@@ -6,6 +6,11 @@
 	$xpoints = array();
 	$ypoints = array();
 
+	$gameNumber = trim($gameNumber);
+    $gameNumber = filter_var($gameNumber, FILTER_SANITIZE_STRING);
+	$playerNumber = trim($playerNumber);
+    $playerNumber = filter_var($playerNumber, FILTER_SANITIZE_STRING);
+
 	if (isset($_POST['AddAllActiveTeams'])) {
 		addAllTeams($connection);
     }elseif (isset($_POST['AddAllActivePlayers'])) {
@@ -14,10 +19,12 @@
 		removeGameData($connection, $_POST["gameNumber"]);
 		addGameData($connection, $_POST["gameNumber"]);
 	}elseif (isset($_POST['AddGamesSince'])){
-		addGamesSince($connection, $game);
+		addGamesSince($connection, $_POST["gameNumber"]);
 	}elseif (isset($_POST['GetGoals'])){
-		//$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE scorer = ".$_POST["playerNumber"]." AND shootout=false;";
-		$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE shootout=false AND shotType='Wrist Shot';";
+		if(playerNumber>0)
+			$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE scorer = ".$_POST["playerNumber"]." AND shootout=false;";
+		else
+			$query = "SELECT xposition AS x, yposition AS y, period as p FROM NHLapiDB.goals WHERE shootout=false AND shotType='Wrist Shot';";
 		$runQuery = mysqli_query($connection, $query);
 		if(!$runQuery)
 			echo "unsuccessful"."<br>".$query."<br>";
