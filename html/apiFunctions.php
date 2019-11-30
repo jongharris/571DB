@@ -173,6 +173,7 @@ function addGameData($connection, $gid){
 	$home = $game_array['gameData']['teams']['home']['id'];
 	//homeStartsLeft boolean
 	$hSL = ($linescore['periods'][0]['home']['rinkSide']=="left");
+	echo (($hSL)? 'Home starts left  ':'Home starts right  ').$home.' is home'."<br>";
 	//big loop creates a specific query for each event type in switch statement
 	//after the switch executes the query if one exists for that event
 	foreach($game_array['liveData']['plays']['allPlays'] as $event){
