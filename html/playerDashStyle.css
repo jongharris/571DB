@@ -90,10 +90,12 @@ body {
 }
 
 .playerInfo {
+    display: flex;
+    flex-direction: row;
     height: 90%;
     width: 100%;
     margin-left: 50px;
-	justify-content: space-between;
+    
     
 }
 
@@ -121,18 +123,17 @@ body {
 }
 
 .heatmapCard{
-	display: flex;
+    display: flex;
     justify-content: center; 
     flex-flow: wrap;
+    height: 150px;
+    margin-left: 50px;
     color: #64696F;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    width: 50%;
-    height: width*(17/40);
-	background-image: url(./hockey-rink-drawing-30.png);
+    width: 799px;
+	
 }
 
 .heatmap{
-	background-image: url(./hockey-rink-drawing-30.png);
-	height: 95%
-	width: 95%
+	
 }
