@@ -39,7 +39,7 @@ function addPlayer($connection, $pid, $tid, $active){
 		.$player['birthDate']."', '".$player['nationality']."', \"".$player['height'].", "
 		.$player['weight'].", ".(($player['shootsCatches']=='L')? 'true' : 'false').", "
 		.($player['rookie'] ? 'true' : 'false').", ".($active? 'true' : 'false').", "
-		.$tid.", ".$player['primaryNumber'].", '".$player['primaryPosition']['abbreviation']."');";
+		.$tid.", ".(($player['primaryNumber'])? $player['primaryNumber']:'NULL').", '".$player['primaryPosition']['abbreviation']."');";
 	$runQuery = mysqli_query($connection, $query);
 	if(!$runQuery){
 		$query2 = "SELECT idplayers FROM players WHERE idplayers = ".$pid.";";
