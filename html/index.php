@@ -1,53 +1,47 @@
 <?php
-    include('/var/www/dbConnection.php');
 
-	if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $team_url = "https://statsapi.web.nhl.com/api/v1/teams";
-        $team_json = file_get_contents($team_url);
-        $team_array = json_decode($team_json, true);
-
-        for($i = 0; $i <= 30; $i++) {
-            $nextTeam = $team_array['teams'][$i];
-
-            $query = "INSERT into NHLapiDB.teams (idteams, teamName, location, division, conference) VALUES ("
-            .$nextTeam['id'].",'".$nextTeam['teamName']."','".$nextTeam['locationName']."','".$nextTeam['division']['name']
-            ."','".$nextTeam['conference']['name']."');";
-
-          //Test
-            echo $query."<br>";
-
-            $runQuery = mysqli_query($connection, $query);
-
-           if($runQuery){
-             echo "Team added.";
-           }else{
-             echo "ERROR: Team not added.";
-           }
-        }
-
-    }
-
-  
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <link rel="stylesheet" href = "land.css">
+
 </head>
 <body>
-   
-   <form method = "post" action = "<?php echo $_SERVER['PHP_SELF'];?>">
-       <button type = "submit"> Request Teams </button>
-   </form>
-<!--    <button id="retrievePlayers" onclick= "requestAllActivePlayers()">Request all Active Players</button>-->
-<!--    <button id="retrieveTeams" onclick= "requestAllTeams()">Request all Teams</button>-->
-
-<!--    <script src = "./requestTeams.js"></script>-->
-<!--    <script src = "./requestPlayers.js"></script>-->
-
+    <div class = "fullWindow">
+        <div class = "left">
+           <div class = "heading">
+                <h1> Welcome to NHL Stat</h1>
+                 <p id = "titleInfo"> An application designed by Andrew Kett and Jonathan Harris to display and analyze your favorite teams and players stat.</Harris></p>
+                  <h2> Search by:        <button id = "team">
+                     Teams
+                 </button> 
+                  <button id = "player">
+                     Players
+                 </button>
+                 </h2>
+            </div>
+            <div class ="buttonArea">
+                <div class = "buttonContainer">
+                
+                 </div>
+                 <div class = "buttonContainer">
+               
+                 </div>
+            </div>
+          
+         </div>
+        
+        <div class = "right">
+            <div>
+            <img id = "pie" src = "hiclipart.com.png">
+            </div>
+            <div>
+            <img id = "line" src = "kissclipart-transparent-line-graph-png-clipart-line-chart-cent-2258ab23d18a8102.png">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
