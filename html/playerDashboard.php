@@ -1,5 +1,6 @@
 <?php
     include('/var/www/dbConnection.php');
+	include('/var/www/html/heatMapQueries.php');
     include('/var/www/html/apiFunctions.php');
     
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -24,44 +25,8 @@
         $run_queryTeam = mysqli_query($connection, $queryTeam);
         $resultTeam = mysqli_fetch_assoc($run_queryTeam);
 		
-		//***Heat Map Queries***//
-		$xpoints = array();
-		$ypoints = array();
-		$xpoints2 = array();
-		$ypoints2 = array();
-		//Faceoffs
-		//$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.faceoffs;";
-		//Goals
-		$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
-			.$resultPlayer['idplayers']." AND shootout=false;";
-			
-		//Shots
-		$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
-			.$resultPlayer['idplayers']." AND shootout=false;";
-		$queryHeat2 = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.shots WHERE shooter = "
-			.$resultPlayer['idplayers']." AND shootout=false;";
-		$runqueryHeat2 = mysqli_query($connection, $queryHeat2);
-		if(!$runqueryHeat2)
-			echo "error";
-		else
-			while ($result = mysqli_fetch_assoc($runqueryHeat2)){
-				array_push($xpoints2, $result['x']);
-				array_push($ypoints2, $result['y']);
-			}
+		list($heatX1, $heatY1, $heatX2, $heatY2) = heatMapPlayerQueries($connection, $resultPlayer);
 		
-		//Shot Attempts
-
-		//$queryHeat = "SELECT xposition AS x, yposition AS y FROM NHLapiDB.goals WHERE scorer = "
-		//	.$resultPlayer['idplayers']." AND shootout=false;";
-		
-		$runqueryHeat = mysqli_query($connection, $queryHeat);
-		if(!$runqueryHeat)
-			echo "error";
-		else
-			while ($result = mysqli_fetch_assoc($runqueryHeat)){
-				array_push($xpoints, $result['x']);
-				array_push($ypoints, $result['y']);
-			}        
     }
         
 
@@ -157,8 +122,8 @@
 		}
 	});
 
-	var xPoints = <?php echo '["' . implode('", "', $xpoints) . '"]' ?>;
-	var yPoints = <?php echo '["' . implode('", "', $ypoints) . '"]' ?>;
+	var xPoints = <?php echo '["' . implode('", "', $heatX1) . '"]' ?>;
+	var yPoints = <?php echo '["' . implode('", "', $heatY1) . '"]' ?>;
 
 	console.log(xPoints);
 	console.log(yPoints);
@@ -190,8 +155,8 @@
 		}
 	});
 
-	var xPoints2 = <?php echo '["' . implode('", "', $xpoints2) . '"]' ?>;
-	var yPoints2 = <?php echo '["' . implode('", "', $ypoints2) . '"]' ?>;
+	var xPoints2 = <?php echo '["' . implode('", "', $heatX2) . '"]' ?>;
+	var yPoints2 = <?php echo '["' . implode('", "', $heatY2) . '"]' ?>;
 
 	console.log(xPoints2);
 	console.log(yPoints2);
