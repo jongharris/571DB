@@ -134,6 +134,7 @@ body {
 }
 
 .heatmapCard{
+	pointer-events: none;
     display: flex;
     justify-content: center; 
 	height: 150px;
@@ -144,7 +145,8 @@ body {
 	
 }
 
-.heatmap{background-image: url(./hockey-rink-scaled.png);
+.heatmap{
+	background: url(./hockey-rink-scaled.png);
 	height: 204px;
     width: 480px;
 }

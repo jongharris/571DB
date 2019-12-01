@@ -94,7 +94,7 @@
             <div class = "topNav">
                <div class = "userForm">
                     <form method = "post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                       <input id = "playerField" type = "text" name = "teamName" placeholder ="Enter Team"><input id = "searchBtn" type = "submit" value = "Search">
+                       <input id = "playerField" type = "text" name = "teamName" placeholder ="Enter Team" style = "z-index: 10;"><input id = "searchBtn" type = "submit" value = "Search">
                    </form>
                </div>
             </div>
@@ -151,14 +151,14 @@
                         </div>
                     </div>    
 					<br>
-					<!--<div class="heatmapCard">
+					<div class="heatmapCard">
                         <div class = "teamCardName">
                             <h3> Goals Heat Map </h3>
                         </div>
 						<div id='heatMap' class="heatmap" name="playerGoals">
 		                    <canvas width="480" height="204" style="position:absolute; left: 0; top: 0"></canvas>
 						</div>
-					</div> -->
+					</div> 
                        
                     <div class = "graphCard">
 
