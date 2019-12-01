@@ -63,47 +63,70 @@
                 </div>
                 
                 <div class = "playerInfo">
-                    <div class = "playerCard">
-                        <div class = "playerCardName">
+                    <div class = "row">
+                        <div class = "playerCard">
+                            <div class = "playerCardName">
+                            <?php
+                          if ($resultPlayer) {
+                            ?>
+                       <h3> <?php echo $resultPlayer['fName']." ".$resultPlayer['lName']." | ".$resultPlayer['primeNumber'];?> </h3>
+							</div>
+   <!--                        Note: ٠ -->
                         <?php
-                       if ($resultPlayer) {
+                         }
                         ?>
-                         <h3> <?php echo $resultPlayer['fName']." ".$resultPlayer['lName']." | ".$resultPlayer['primeNumber'];?> </h3>
-                        </div>
-<!--                        Note: ٠ -->
-                    <?php
-                       }
-                    ?>
 
-                        <div class = "playerCardDetails">
-                            <p style = "text-align: center">
-							<?php echo (($resultPlayer['primePosition'])?$resultPlayer['primePosition']:'-')."  •  "
-										.(($resultPlayer['shootsLeft'])?'Left':'Right')."  •  "
-										.(($resultTeam)? $resultTeam['location']." ".$resultTeam['teamName']:'Not Active'); ?></p> 
-                            <p style = "text-align: center">
-							<?php echo (($resultPlayer['height'])?$resultPlayer['height']:"-'--")."\"  •  "
-										.(($resultPlayer['weight'])?$resultPlayer['weight']:'---')."lbs  •  Age: "
-										.(($resultPlayer['age'])? floor($resultPlayer['age']/365.25) : '--')."  •  "
-										.(($resultPlayer['nationality'])? $resultPlayer['nationality']:'---'); ?></p>
-                           
+                            <div class = "playerCardDetails">
+                                <p style = "text-align: center">
+  
+                                <?php echo (($resultPlayer['primePosition'])?$resultPlayer['primePosition']:'-')."  •  "
+                                            .(($resultPlayer['shootsLeft'])?'Left':'Right')."  •  "
+                                            .(($resultTeam)? $resultTeam['location']." ".$resultTeam['teamName']:'Not Active'); ?></p> 
+  
+                                <p style = "text-align: center">
+
+                                <?php echo (($resultPlayer['height'])?$resultPlayer['height']:"-'--")."\"  •  "
+                                            .(($resultPlayer['weight'])?$resultPlayer['weight']:'---')."lbs  •  Age: "
+                                            .(($resultPlayer['age'])? floor($resultPlayer['age']/365.25) : '--')."  •  "
+                                            .(($resultPlayer['nationality'])? $resultPlayer['nationality']:'---'); ?></p>
+
+	
+                            </div>
                         </div>
-                    </div>
+                             <div class = "graphCard">
+                                 <div class = "playerCardName">
+									<h3> Patrick Kane </h3>
+								 </div>
+                             
+								<canvas id = "myChart"> </canvas>
+							</div>
+
+							<div class = "graphCard">
+								Goals <input type = "radio" name = "graphType" value = "goals">
+								Shots<input type = "radio" name = "graphType" value = "shots">
+								PowerPlay <input type = "radio" name = "graphType" value = "powerplays">
+							</div>
+						
+					</div> 
+					
 					<br>
-					<div class="heatmapCard">
-                        <div class = "playerCardName">
-                            <h3> Goals Heat Map </h3>
+					
+					<div class = "row">
+                        <div class="heatmapCard">
+                            <div class = "playerCardName">
+                                <h3> Goals Heat Map </h3>
+                            </div>
+                            <div id='heatMap' class="heatmap" name="playerGoals">
+                                <canvas width="799" height="340" style="position:absolute; left: 0; top: 0"></canvas>
+                            </div>
                         </div>
-						<div id='heatMap' class="heatmap" name="playerGoals">
-		                    <canvas width="799" height="340" style="position:absolute; left: 0; top: 0"></canvas>
-						</div>
-					</div>
-                        
+                    </div>   
+                     
                 </div>
 				
 				
             </div>
         </div>
-    </div>
     </div>
 </body>
 
@@ -173,6 +196,8 @@
        data: dataPoints2
 	};
 	heatmapInstance2.setData(testData2);
+	
+	
 	
 </script>
 </html>
