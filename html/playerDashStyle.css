@@ -92,11 +92,19 @@ body {
 .playerInfo {
     display: flex;
     flex-direction: row;
+    flex-flow: wrap;
+    align-content: flex-start;
     height: 90%;
     width: 100%;
     margin-left: 50px;
-    
-    
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    width: 100%;
+    margin-bottom: 150px;
 }
 
 .playerCard {
@@ -114,7 +122,7 @@ body {
     color: white;
     text-align: center; 
     background-color: #313A46;
-    height: 40%;
+    height: 60px;
     width: 100%;
 }
 
@@ -130,11 +138,20 @@ body {
     margin-left: 50px;
     color: #64696F;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    width: 799px;
+    width: 480px;
 	
 }
 
 .heatmap{background-image: url(./hockey-rink-scaled.png);
 	height: 204px;
     width: 480px;
+}
+
+.graphCard {
+    background-color: white;
+    margin-left: 50px;
+    height: 275px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    
+
 }
