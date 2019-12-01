@@ -1,6 +1,7 @@
 <?php
     include('/var/www/dbConnection.php');
     include('/var/www/html/apiFunctions.php');
+	include('/var/www/html/lineGraphQueries.php');
     
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
@@ -30,6 +31,41 @@
 		
 		$runQuery = mysqli_query($connection, $query);
 		$record = mysqli_fetch_assoc($runQuery);
+		
+		$runGraph = lineGraphTeamQuery($connection, $resultTeam['idteams']);
+		
+		$date = array();
+		$goalsFor = array();
+		$goalsAgainst = array();
+		$shotsFor = array();
+		$shotsAgainst = array();
+		$ppFor = array();
+		$ppAgainst = array();
+		$gTotal = 0;
+		$gaTotal = 0;
+		$sTotal = 0;
+		$saTotal = 0;
+		$ppTotal = 0;
+		$ppaTotal = 0;
+		
+		
+       while ($lineData = mysqli_fetch_assoc($runGraph)) {
+            array_push($date, $lineData['date']);
+			array_push($goalsFor, $lineData['GoalsFor']);
+			$gTotal = $gTotal + (int)$lineData['GoalsFor'];
+            array_push($goalsAgainst, $lineData['GoalsAgainst']);
+			$gaTotal = $gaTotal + (int)$lineData['GoalsAgainst'];
+            array_push($shotsFor, $lineData['ShotsFor']);
+			$sTotal = $sTotal + (int)$lineData['ShotsFor'];
+            array_push($shotsAgainst, $lineData['ShotsAgainst']);
+			$saTotal = $saTotal + (int)$lineData['ShotsAgainst'];
+            array_push($ppFor, $lineData['Powerplays']);
+			//$ppTotal = $ppTotal + (int)$lineData['Powerplays']);
+            array_push($ppAgainst, $lineData['PenaltyKills']);
+			//$ppaTotal = $ppaTotal + (int)$lineData['PenaltyKills']);
+
+		}
+		
 		
     }
         
@@ -92,23 +128,26 @@
                         </div>
                         <div class = "graphCard">
                              <div class = "teamCardName">
-                        
+								Goals <input type = "radio" name = "graphType" value = "goals">
+								Shots<input type = "radio" name = "graphType" value = "shots">
+								PowerPlay <input type = "radio" name = "graphType" value = "powerplays">
                              
         
                             </div>
                              
-								<canvas id = "myChart"> </canvas> 
+							<canvas id = "myChart"> </canvas> 
 
                       
-                            
-
+                   
 
                         </div>
 
                         <div class = "graphCard">
-                            Goals <input type = "radio" name = "graphType" value = "goals">
-                            Shots<input type = "radio" name = "graphType" value = "shots">
-                            PowerPlay <input type = "radio" name = "graphType" value = "powerplays">
+                            <div class = "teamCardName">
+							
+							</div>
+							
+							<canvas id = "spiderChart"> </canvas>
                         </div>
                     </div>    
 					<br>
@@ -136,16 +175,31 @@
         
     <script>
     
+
+		let date = <?php echo '["' . implode('", "', $date) . '"]' ?>;
+		let goalsFor  = <?php echo '["' . implode('", "', $goalsFor) . '"]' ?>;
+		let goalsAgainst = <?php echo '["' . implode('", "', $goalsAgainst) . '"]' ?>;
+		let shotsFor = <?php echo '["' . implode('", "', $shotsFor) . '"]' ?>;
+		let shotsAgainst = <?php echo '["' . implode('", "', $shotsAgainst) . '"]' ?>;
+		let ppFor = <?php echo '["' . implode('", "', $ppFor) . '"]' ?>;
+		let ppAgainst = <?php echo '["' . implode('", "', $ppAgainst) . '"]' ?>;
+
         let myChart = document.getElementById('myChart').getContext('2d');
      
         let massChart = new Chart(myChart, {
             type: 'line', //bar, horizontal bar, pie, line, donut, radar, polarArea
             data: {
-                labels:['Game 1', 'Game 2', 'Game 3', 'Game 4', 'Game 5'],
-                datasets:[{
-             
-                
-                }]
+				labels: date,
+				datasets:[
+				{
+					label: 'Goals For',
+					data: goalsFor,
+					backgroundColor:'rgba(255, 0, 0, 0.4)'},
+				{
+					label: 'Goals Against',
+					data:goalsAgainst,
+					backgroundColor: 'rgba(0,0,255,0.4'}
+				]
             },
             options: {
                 title: {
@@ -154,6 +208,51 @@
                 }
             }
         });
+		
+		
+		let gTotal = <?php echo $gTotal;?> 
+		let gaTotal = <?php echo $gaTotal;?>
+		
+		let sTotal = <?php echo $sTotal;?>
+		
+		let saTotal = <?php echo $saTotal;?>
+		/*
+		let ppTotal = <?php echo $ppTotal;?>
+		
+		let ppaTotal = <?php echo $ppaTotal;?>
+		*/
+		
+		console.log(gTotal);
+		console.log(gaTotal);
+		console.log(sTotal);
+		console.log(saTotal);
+		
+		let spiderChartID = document.getElementById('spiderChart').getContext('2d');
+     
+        let spiderChart = new Chart(spiderChartID, {
+            type: 'radar', //bar, horizontal bar, pie, line, donut, radar, polarArea
+            data: {
+				labels: ['Goals', 'PowerPlays', 'PowerPlays Given', 'Goals Against', 'Shots Against', 'Shots'],
+				datasets:[
+				{
+					label: 'Goals For',
+					
+					data: [gTotal, gaTotal, sTotal, saTotal/*, ppTotal, ppaTotal*/],
+					backgroundColor:'rgba(0, 0, 255, 0.7)'
+				}
+	
+				]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Goals Per Game'
+                }
+            }
+        });
+		
+		
+		
     </script>
 </body>
 
