@@ -5,7 +5,8 @@
     
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
-        //raw data clense this
+        {//process player input
+		//raw data clense this
         $raw_playerName = $_POST['playerName'];
         
         //clean data
@@ -24,8 +25,11 @@
         $queryTeam = "Select teamName, location from NHLapiDB.teams WHERE idteams = ".$resultPlayer['currentTeam'].";";
         $run_queryTeam = mysqli_query($connection, $queryTeam);
         $resultTeam = mysqli_fetch_assoc($run_queryTeam);
-		
+		}
+		{//call heatmap function
 		list($heatX1, $heatY1, $heatX2, $heatY2) = heatMapPlayerQueries($connection, $resultPlayer);
+		}
+		
 		
     }
         
