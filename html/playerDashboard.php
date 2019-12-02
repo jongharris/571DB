@@ -29,20 +29,15 @@
         $resultTeam = mysqli_fetch_assoc($run_queryTeam);
 		}
 		{//call heatmap function
-		list($heatX1, $heatY1, $heatX2, $heatY2) = heatMapPlayerQueries($connection, $resultPlayer);
+		if($resultPlayer)
+			list($heatX1, $heatY1, $heatX2, $heatY2) = heatMapPlayerQueries($connection, $resultPlayer);
 		}
-		
-		$runGraph = lineGraphPlayerQuery($connection, $resultPlayer['idplayers']);
-		
-		$date = array();
-		$goals = array();
-		$assists = array();
-		while ($lineData = mysqli_fetch_assoc($runGraph)) {
-					array_push($date, $lineData['date']);
-					array_push($goals, $lineData['goals']);
-					array_push($assists, $lineData['assists']);
-				}
-
+		{//call chart functions
+		if($resultPlayer){
+			list($date, $goals, $assists) = lineGraphPlayerQuery($connection, $resultPlayer['idplayers']);
+			$radarData = radarGraphSkater($connection, $resultPlayer['idplayers']);
+		}
+		}
     }
         
 
