@@ -4,7 +4,7 @@
 			."COUNT(IF(team = ".$teamID.", NULL, 1))+GoalsAgainst AS ShotsAgainst, Powerplays, PenaltyKills FROM "
 			."(SELECT date, idgames, COUNT(IF(team = ".$teamID.", 1, NULL)) AS GoalsFor, COUNT(IF(team = ".$teamID.", NULL, 1)) "
 			."AS GoalsAgainst, IF(home = ".$teamID.", homePPOpps, awayPPOpps) AS PowerPlays, IF(home = ".$teamID.", awayPPOpps, homePPOpps) "
-			."AS PenaltyKills FROM (SELECT game, team FROM NHLapiDB.goals WHERE shootout=false) AS GOALS JOIN "
+			."AS PenaltyKills FROM (SELECT game, team FROM NHLapiDB.goals WHERE shootout=false) AS GOALS RIGHT JOIN "
 			."(SELECT date(date) AS date, idgames, home, homePPOpps, awayPPOpps FROM NHLapiDB.games WHERE home = ".$teamID." OR away = ".$teamID.") "
 			."AS GAMES ON game=idgames GROUP BY date) AS DATA JOIN (SELECT game, team FROM NHLapiDB.shots WHERE shootout=false) "
 			."AS SHOTS ON game=idgames GROUP BY DATE;";
@@ -58,10 +58,11 @@
 	}
 
 	function lineGraphPlayerQuery($connection, $playerID) {
-		$query = "SELECT date(date) as date, count(IF(scorer=".$playerID.", 1, NULL)) as goals, count(IF(scorer=".$playerID.", NULL, 1)) as assists 
-				FROM NHLapiDB.games as gametable JOIN (SELECT game, scorer, assist1, assist2 FROM NHLapiDB.goals as go WHERE scorer="
-				.$playerID." OR assist1 = ".$playerID." OR assist2 = ".$playerID.") 
-				AS goaltable ON gametable.idgames = goaltable.game Group by date;";
+		$query = "SELECT date, count(IF(scorer=".$playerID.", 1, NULL)) as goals, count(IF(scorer!=".$playerID." AND scorer IS NOT NULL, 1, NULL)) as assists
+					FROM (Select idgames, date(date) as date from NHLapiDB.games) as DATES JOIN
+					((Select game from NHLapiDB.gamesPlayedIn where player = ".$playerID.") as GP LEFT JOIN
+					(SELECT game, scorer, assist1, assist2 FROM NHLapiDB.goals WHERE scorer= ".$playerID." 
+					OR assist1 = ".$playerID." OR assist2 = ".$playerID.") AS POINTS ON GP.game=POINTS.game) ON idgames=GP.game GROUP BY date;";
 		$runGraph = mysqli_query($connection, $query);
 		$date = array();
 		$goals = array();
