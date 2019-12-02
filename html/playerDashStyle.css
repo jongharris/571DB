@@ -149,6 +149,7 @@ body {
 
 .graphCard {
     background-color: white;
+	width: 30%;
     margin-left: 50px;
     height: 275px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
