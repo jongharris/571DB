@@ -2,6 +2,8 @@
     include('/var/www/dbConnection.php');
 	include('/var/www/html/heatMapQueries.php');
     include('/var/www/html/apiFunctions.php');
+	include('/var/www/html/lineGraphQueries.php');
+
     
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
@@ -30,7 +32,17 @@
 		list($heatX1, $heatY1, $heatX2, $heatY2) = heatMapPlayerQueries($connection, $resultPlayer);
 		}
 		
+		$runGraph = lineGraphPlayerQuery($connection, $resultPlayer['idplayers']);
 		
+		$date = array();
+		$goals = array();
+		$assists = array();
+		while ($lineData = mysqli_fetch_assoc($runGraph)) {
+					array_push($date, $lineData['date']);
+					array_push($goals, $lineData['goals']);
+					array_push($assists, $lineData['assists']);
+				}
+
     }
         
 
@@ -40,6 +52,8 @@
 <!DOCTYPE html
 <html lang="en">
 <script src='http://www.patrick-wied.at/static/heatmapjs/assets/js/heatmap.min.js'></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -57,7 +71,7 @@
             <div class = "topNav">
                <div class = "userForm">
                    <form method = "post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player"><input id = "searchBtn" type = "submit" value = "Search">
+                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player" style = "z-index: 100;"><input id = "searchBtn" type = "submit" value = "Search">
                    </form>
                </div>
             </div>
@@ -70,16 +84,14 @@
                     <div class = "row">
                         <div class = "playerCard">
                             <div class = "playerCardName">
-                            <?php
-                          if ($resultPlayer) {
-                            ?>
-                       <h3> <?php echo $resultPlayer['fName']." ".$resultPlayer['lName']." | ".$resultPlayer['primeNumber'];?> </h3>
+                          
+                       <h3> <?php echo (($resultPlayer) ? $resultPlayer['fName'] : "")." "
+								.(($resultPlayer) ? $resultPlayer['lName'] : "")." | "
+								.(($resultPlayer) ? $resultPlayer['primeNumber'] : "");?> </h3>
 							</div>
    <!--                        Note: ٠ -->
-                        <?php
-                         }
-                        ?>
-
+                      
+	
                             <div class = "playerCardDetails">
                                 <p style = "text-align: center">
   
@@ -99,7 +111,6 @@
                         </div>
                              <div class = "graphCard">
                                  <div class = "playerCardName">
-									<h3> Patrick Kane </h3>
 								 </div>
                              
 								<canvas id = "myChart"> </canvas>
@@ -116,13 +127,13 @@
 					<br>
 					
 					<div class = "row">
-                        <div class="heatmapCard">
+                       <!-- <div class="heatmapCard">
                             <div class = "playerCardName">
                                 <h3> Goals Heat Map </h3>
                             </div>
                             <div id='heatMap' class="heatmap" name="playerGoals">
                                 <canvas width="799" height="340" style="position:absolute; left: 0; top: 0"></canvas>
-                            </div>
+                            </div> -->
                         </div>
                     </div>   
                      
@@ -136,6 +147,41 @@
 
 
 <script> 
+
+	let date = <?php echo '["' . implode('", "', $date) . '"]' ?>;
+	let goals = <?php echo '["' . implode('", "', $goals) . '"]' ?>;
+	let assists = <?php echo '["' . implode('", "', $assists) . '"]' ?>;
+	console.log(date);
+	console.log(goals);
+	console.log(assists);
+	
+	let myChart = document.getElementById('myChart').getContext('2d');
+     
+        let massChart = new Chart(myChart, {
+            type: 'line', //bar, horizontal bar, pie, line, donut, radar, polarArea
+            data: {
+				labels: date,
+				datasets:[
+				{
+					label: 'Goals',
+					data: goals,
+					backgroundColor:'rgba(255, 0, 0, 0.4)'},
+				{
+					label: 'Assists',
+					data:assists,
+					backgroundColor: 'rgba(0,0,255,0.4'}
+				]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Goals and Assists'
+                }
+            }
+        });
+
+
+
 	var heatmapInstance = h337.create({
 		container: document.getElementById('heatMap'),
 		radius: 14,
