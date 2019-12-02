@@ -136,10 +136,6 @@
 		                    <canvas width="480" height="204" style="position:absolute; left: 0; top: 0"></canvas>
 						</div>
 					</div> 
-                       
-                    <div class = "graphCard">
-
-                    </div>
                         
                 </div>
 				

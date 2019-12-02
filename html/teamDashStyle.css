@@ -18,6 +18,8 @@ body {
     left: 0;
 }
 
+
+
 .topNav {
     width: 100%;
     height: 8%;
@@ -27,6 +29,16 @@ body {
 
 }
 
+#playerField {
+font-family: arial;
+    font-style: italic;
+    background-color: #F5F6F9;   
+    border-style: none;
+    color: #949BA3;
+
+    height: 25px;
+
+}
 .content {
     font-family: arial;
     display: flex;
@@ -45,6 +57,7 @@ body {
     flex-direction: row;
     flex-flow: wrap;
     width: 90%;
+	height: 100vh;
 }
 
 .userForm {
@@ -95,10 +108,10 @@ body {
     flex-direction: row;
     flex-flow: wrap;
     align-content: flex-start;
-    height: 90%;
     width: 100%;
     margin-left: 50px;
-    
+	height: 575px;
+
     
 }
 
@@ -107,7 +120,7 @@ body {
     flex-direction: row;
     align-content: flex-start;
     width: 100%;
-    margin-bottom: 150px;
+    margin-bottom: 25px;
 }
 
 .teamCard {

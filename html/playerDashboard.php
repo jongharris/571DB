@@ -66,7 +66,7 @@
             <div class = "topNav">
                <div class = "userForm">
                    <form method = "post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player" style = "z-index: 100;"><input id = "searchBtn" type = "submit" value = "Search">
+                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player" style = "z-index: 10;"><input id = "searchBtn" type = "submit" value = "Search">
                    </form>
                </div>
             </div>
@@ -106,29 +106,28 @@
                         </div>
                              <div class = "graphCard">
                                  <div class = "playerCardName">
+									<h3> Line Graph </h3>
 								 </div>
                              
 								<canvas id = "myChart"> </canvas>
 							</div>
 
 							<div class = "graphCard">
-								Goals <input type = "radio" name = "graphType" value = "goals">
-								Shots<input type = "radio" name = "graphType" value = "shots">
-								PowerPlay <input type = "radio" name = "graphType" value = "powerplays">
+								
 							</div>
 						
 					</div> 
 					
 					<br>
 					
-					<div class = "row">
-                       <!-- <div class="heatmapCard">
+					<div class = "row" style = "z-index: 0">
+                        <div class="heatmapCard">
                             <div class = "playerCardName">
                                 <h3> Goals Heat Map </h3>
                             </div>
                             <div id='heatMap' class="heatmap" name="playerGoals">
-                                <canvas width="799" height="340" style="position:absolute; left: 0; top: 0"></canvas>
-                            </div> -->
+                                <canvas width="480" height="204" style="position:absolute; left: 0; top: 0"></canvas>
+                            </div> 
                         </div>
                     </div>   
                      
