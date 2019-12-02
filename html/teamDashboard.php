@@ -36,39 +36,9 @@
 		}
 		
 		{//Get Graph Data for Team
-		$runGraph = lineGraphTeamQuery($connection, $resultTeam['idteams']);
-		
-		$date = array();
-		$goalsFor = array();
-		$goalsAgainst = array();
-		$shotsFor = array();
-		$shotsAgainst = array();
-		$ppFor = array();
-		$ppAgainst = array();
-		$gTotal = 0;
-		$gaTotal = 0;
-		$sTotal = 0;
-		$saTotal = 0;
-		$ppTotal = 0;
-		$ppaTotal = 0;
-		$gpTotal = 0;
-		
-       while ($lineData = mysqli_fetch_assoc($runGraph)) {
-            array_push($date, $lineData['date']);
-			array_push($goalsFor, $lineData['GoalsFor']);
-			$gTotal = $gTotal + (int)$lineData['GoalsFor'];
-            array_push($goalsAgainst, $lineData['GoalsAgainst']);
-			$gaTotal = $gaTotal + (int)$lineData['GoalsAgainst'];
-            array_push($shotsFor, $lineData['ShotsFor']);
-			$sTotal = $sTotal + (int)$lineData['ShotsFor'];
-            array_push($shotsAgainst, $lineData['ShotsAgainst']);
-			$saTotal = $saTotal + (int)$lineData['ShotsAgainst'];
-            array_push($ppFor, $lineData['Powerplays']);
-			$ppTotal = $ppTotal + (int)$lineData['Powerplays'];
-            array_push($ppAgainst, $lineData['PenaltyKills']);
-			$ppaTotal = $ppaTotal + (int)$lineData['PenaltyKills'];
-			$gpTotal ++;
-		}
+		list($date,	$goalsFor, $goalsAgainst, $shotsFor, $shotsAgainst, $ppFor, $ppAgainst,
+			$gTotal, $gaTotal, $sTotal, $saTotal, $ppTotal, $ppaTotal, $gpTotal) 
+			= lineGraphTeamQuery($connection, $resultTeam['idteams']);
 		
 		$radarData = radarGraphTeamAvgs($connection);
 		}
