@@ -2,9 +2,11 @@
     include('/var/www/dbConnection.php');
     include('/var/www/html/apiFunctions.php');
 	include('/var/www/html/lineGraphQueries.php');
+	include('/var/www/html/heatMapQueries.php');
     
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
+		{//process team input
         //raw data clense this
         $raw_teamName = $_POST['teamName'];
         
@@ -31,7 +33,9 @@
 		
 		$runQuery = mysqli_query($connection, $query);
 		$record = mysqli_fetch_assoc($runQuery);
+		}
 		
+		{//Get Graph Data for Team
 		$runGraph = lineGraphTeamQuery($connection, $resultTeam['idteams']);
 		
 		$date = array();
@@ -47,7 +51,7 @@
 		$saTotal = 0;
 		$ppTotal = 0;
 		$ppaTotal = 0;
-		
+		$gpTotal = 0;
 		
        while ($lineData = mysqli_fetch_assoc($runGraph)) {
             array_push($date, $lineData['date']);
@@ -60,13 +64,19 @@
             array_push($shotsAgainst, $lineData['ShotsAgainst']);
 			$saTotal = $saTotal + (int)$lineData['ShotsAgainst'];
             array_push($ppFor, $lineData['Powerplays']);
-			//$ppTotal = $ppTotal + (int)$lineData['Powerplays']);
+			$ppTotal = $ppTotal + (int)$lineData['Powerplays'];
             array_push($ppAgainst, $lineData['PenaltyKills']);
-			//$ppaTotal = $ppaTotal + (int)$lineData['PenaltyKills']);
-
+			$ppaTotal = $ppaTotal + (int)$lineData['PenaltyKills'];
+			$gpTotal ++;
 		}
 		
+		$radarData = radarGraphTeamAvgs($connection);
+		}
 		
+		{//call heatmap function
+		list($heatX1, $heatY1, $heatX2, $heatY2, $heatX3, $heatY3, $heatX4, $heatY4) = heatMapTeamGSFA($connection, $resultTeam['idteams']);
+		}
+
     }
         
 
@@ -173,9 +183,8 @@
    
     
         
-    <script>
-    
-
+    <script>//charts
+ 
 		let date = <?php echo '["' . implode('", "', $date) . '"]' ?>;
 		let goalsFor  = <?php echo '["' . implode('", "', $goalsFor) . '"]' ?>;
 		let goalsAgainst = <?php echo '["' . implode('", "', $goalsAgainst) . '"]' ?>;
@@ -210,22 +219,17 @@
         });
 		
 		
-		let gTotal = <?php echo $gTotal;?> 
-		let gaTotal = <?php echo $gaTotal;?>
+		let gpTotal = <?php echo $gpTotal;?>;
+		let gTotal = <?php echo $gTotal;?> ;
+		let gaTotal = <?php echo $gaTotal;?>;
+		let sTotal = <?php echo $sTotal;?>;
+		let saTotal = <?php echo $saTotal;?>;
+		let ppTotal = <?php echo $ppTotal;?>;
+		let ppaTotal = <?php echo $ppaTotal;?>;
 		
-		let sTotal = <?php echo $sTotal;?>
-		
-		let saTotal = <?php echo $saTotal;?>
-		/*
-		let ppTotal = <?php echo $ppTotal;?>
-		
-		let ppaTotal = <?php echo $ppaTotal;?>
-		*/
-		
-		console.log(gTotal);
-		console.log(gaTotal);
-		console.log(sTotal);
-		console.log(saTotal);
+		let avgGoals = <?php echo $radarData['avgGoals'];?>;
+		let avgShots = <?php echo $radarData['avgShots'];?>;
+		let avgPPs = <?php echo $radarData['avgPPs'];?>;
 		
 		let spiderChartID = document.getElementById('spiderChart').getContext('2d');
      
@@ -234,19 +238,29 @@
             data: {
 				labels: ['Goals', 'PowerPlays', 'PowerPlays Given', 'Goals Against', 'Shots Against', 'Shots'],
 				datasets:[
-				{
-					label: 'Goals For',
-					
-					data: [gTotal, gaTotal, sTotal, saTotal/*, ppTotal, ppaTotal*/],
-					backgroundColor:'rgba(0, 0, 255, 0.7)'
-				}
-	
-				]
+				{				
+					data: [(gTotal/gpTotal)/avgGoals, (ppTotal/gpTotal)/avgPPs, (ppaTotal/gpTotal)/avgPPs, 
+							(gaTotal/gpTotal)/avgGoals, (saTotal/gpTotal)/avgShots,	(sTotal/gpTotal)/avgShots],
+					backgroundColor:'rgba(255, 0, 0, 0.5)'
+				},{
+					data: [.5, .5, .5, .5, .5,	.5],
+					backgroundColor:'rgba(100, 100, 100, 0.25)'
+				}]
             },
             options: {
+				scale: {
+					ticks: {
+						display: false,
+						suggestedMin: 0.35,
+						suggestedMax: 0.65
+					}
+				},
+				legend: {
+					display: false,
+				},
                 title: {
-                    display: true,
-                    text: 'Goals Per Game'
+                    display: false,
+                    text: 'Radar'
                 }
             }
         });
@@ -254,6 +268,131 @@
 		
 		
     </script>
+	
+	<script>//heatmap
+	var heatmapInstance4 = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.6,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#444444',
+			'.6': '#777777',
+			'.3': '#AAAAAA',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints4 = <?php echo '["' . implode('", "', $heatX4) . '"]' ?>;
+	var yPoints4 = <?php echo '["' . implode('", "', $heatY4) . '"]' ?>;
+
+	dataPoints4 = [];
+	for(var i=0; i<xPoints4.length; i++){
+		dataPoints4.push({x: (parseFloat(xPoints4[i])+100)*2.4, y: (parseFloat(yPoints4[i])+42.5)*2.4, value: 1});
+	}
+
+	var testData4 = {
+		min: 0,
+        max: 10,
+       data: dataPoints4
+	};
+	heatmapInstance4.setData(testData4);
+	
+	
+	var heatmapInstance3 = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.85,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#0000AA',
+			'.6': '#0000FF',
+			'.3': '#AAAAFF',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints3 = <?php echo '["' . implode('", "', $heatX3) . '"]' ?>;
+	var yPoints3 = <?php echo '["' . implode('", "', $heatY3) . '"]' ?>;
+
+	console.log(xPoints4);
+	console.log(xPoints3);
+
+	dataPoints3 = [];
+	for(var i=0; i<xPoints3.length; i++){
+		dataPoints3.push({x: (parseFloat(xPoints3[i])+100)*2.4, y: (parseFloat(yPoints3[i])+42.5)*2.4, value: 1});
+	}
+	
+	console.log(dataPoints4);
+	console.log(dataPoints3);
+	
+	var testData3 = {
+		min: 0,
+        max: 3,
+		data: dataPoints3
+	};
+	heatmapInstance3.setData(testData3);
+
+
+	var heatmapInstance2 = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.6,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#00AA00',
+			'.6': '#00FF00',
+			'.3': '#AAFFAA',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints2 = <?php echo '["' . implode('", "', $heatX2) . '"]' ?>;
+	var yPoints2 = <?php echo '["' . implode('", "', $heatY2) . '"]' ?>;
+
+	dataPoints2 = [];
+	for(var i=0; i<xPoints2.length; i++){
+		dataPoints2.push({x: (parseFloat(xPoints2[i])+100)*2.4, y: (parseFloat(yPoints2[i])+42.5)*2.4, value: 1});
+	}
+
+	var testData2 = {
+		min: 0,
+        max: 10,
+       data: dataPoints2
+	};
+	heatmapInstance2.setData(testData2);
+	
+	
+	var heatmapInstance = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.85,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#AA0000',
+			'.6': '#FF0000',
+			'.3': '#FFAAAA',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints = <?php echo '["' . implode('", "', $heatX1) . '"]' ?>;
+	var yPoints = <?php echo '["' . implode('", "', $heatY1) . '"]' ?>;
+
+	dataPoints = [];
+	for(var i=0; i<xPoints.length; i++){
+		dataPoints.push({x: (parseFloat(xPoints[i])+100)*2.4, y: (parseFloat(yPoints[i])+42.5)*2.4, value: 1});
+	}
+
+	var testData = {
+		min: 0,
+        max: 3,
+		data: dataPoints
+	};
+	heatmapInstance.setData(testData);
+
+	
+	</script>
 </body>
 
 
