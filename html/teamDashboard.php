@@ -34,15 +34,12 @@
 		$runQuery = mysqli_query($connection, $query);
 		$record = mysqli_fetch_assoc($runQuery);
 		}
-		
 		{//Get Graph Data for Team
 		list($date,	$goalsFor, $goalsAgainst, $shotsFor, $shotsAgainst, $ppFor, $ppAgainst,
 			$gTotal, $gaTotal, $sTotal, $saTotal, $ppTotal, $ppaTotal, $gpTotal) 
 			= lineGraphTeamQuery($connection, $resultTeam['idteams']);
-		
 		$radarData = radarGraphTeamAvgs($connection);
 		}
-		
 		{//call heatmap function
 		list($heatX1, $heatY1, $heatX2, $heatY2, $heatX3, $heatY3, $heatX4, $heatY4) = heatMapTeamGSFA($connection, $resultTeam['idteams']);
 		}

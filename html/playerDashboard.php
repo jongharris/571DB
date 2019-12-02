@@ -174,42 +174,50 @@
                 }
             }
         });
+</script>
+<script>
+		//SELECT count(*) as gp, hits, sum(hitsT) as hitsT, hit, sum(hitT) as hitT, goals, sum(goalsT) as goalsT,
+		//	assists, sum(assistsT) as assistsT, shots, sum(shotsT) as shotsT, drawnPs, sum(drawnPsT) as drawnPsT,
+		//	takenPs, sum(takenPsT) as takenPsT, gives, sum(givesT) as givesT, takes, sum(takesT) as takesT, blocks, sum(blocksT) as blocksT
+		
+		/*let gpTotal = <?php echo $gpTotal;?>;
+		let r_goals = <?php echo $radarData['goals'];?>;
+		
+		let spiderChartID = document.getElementById('spiderChart').getContext('2d');
+     
+        let spiderChart = new Chart(spiderChartID, {
+            type: 'radar', //bar, horizontal bar, pie, line, donut, radar, polarArea
+            data: {
+				labels: ['Goals', 'Takeaways', 'Drawn Penalties', 'Hits Received', 'Hits Made', 'Penalties', 'Giveaways', 'Assists', 'Shots', 'Shotblocks'],
+				datasets:[
+				{				
+					data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					backgroundColor:'rgba(255, 0, 0, 0.5)'
+				},{
+					data: [1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18],
+					backgroundColor:'rgba(100, 100, 100, 0.25)'
+				}]
+            },
+            options: {
+				scale: {
+					ticks: {
+						display: false,
+						suggestedMin: 0.35,
+						suggestedMax: 0.65
+					}
+				},
+				legend: {
+					display: false,
+				},
+                title: {
+                    display: false,
+                    text: 'Radar'
+                }
+            }
+        });*/
 
-
-
-	var heatmapInstance = h337.create({
-		container: document.getElementById('heatMap'),
-		radius: 14,
-		maxOpacity: 0.85,
-		minOpacity: 0.01,
-		gradient: {
-			'.9': '#AA0000',
-			'.6': '#FF0000',
-			'.3': '#FFAAAA',
-			'.01': 'white'
-		}
-	});
-
-	var xPoints = <?php echo '["' . implode('", "', $heatX1) . '"]' ?>;
-	var yPoints = <?php echo '["' . implode('", "', $heatY1) . '"]' ?>;
-
-	console.log(xPoints);
-	console.log(yPoints);
-
-	dataPoints = [];
-	for(var i=0; i<xPoints.length; i++){
-		dataPoints.push({x: (parseFloat(xPoints[i])+100)*2.4, y: (parseFloat(yPoints[i])+42.5)*2.4, value: 1});
-	}
-	console.log(dataPoints);
-
-	var testData = {
-		min: 0,
-        max: 1,
-		data: dataPoints
-	};
-	heatmapInstance.setData(testData);
-
-
+</script>
+<script>/*
 	var heatmapInstance2 = h337.create({
 		container: document.getElementById('heatMap'),
 		radius: 14,
@@ -242,7 +250,37 @@
 	};
 	heatmapInstance2.setData(testData2);
 	
-	
+	var heatmapInstance = h337.create({
+		container: document.getElementById('heatMap'),
+		radius: 14,
+		maxOpacity: 0.85,
+		minOpacity: 0.01,
+		gradient: {
+			'.9': '#AA0000',
+			'.6': '#FF0000',
+			'.3': '#FFAAAA',
+			'.01': 'white'
+		}
+	});
+
+	var xPoints = <?php echo '["' . implode('", "', $heatX1) . '"]' ?>;
+	var yPoints = <?php echo '["' . implode('", "', $heatY1) . '"]' ?>;
+
+	console.log(xPoints);
+	console.log(yPoints);
+
+	dataPoints = [];
+	for(var i=0; i<xPoints.length; i++){
+		dataPoints.push({x: (parseFloat(xPoints[i])+100)*2.4, y: (parseFloat(yPoints[i])+42.5)*2.4, value: 1});
+	}
+	console.log(dataPoints);
+
+	var testData = {
+		min: 0,
+        max: 1,
+		data: dataPoints
+	};
+	heatmapInstance.setData(testData);*/
 	
 </script>
 </html>
