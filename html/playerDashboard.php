@@ -119,8 +119,12 @@
 							</div>
 
 							<div class = "graphCard">
-								
+                            <div class = "playerCardName">
+								<h3> Radar Chart </h3>
 							</div>
+							
+							<canvas id = "spiderChart"> </canvas>
+                        </div>
 						
 					</div> 
 					
@@ -186,21 +190,41 @@
 		//	assists, sum(assistsT) as assistsT, shots, sum(shotsT) as shotsT, drawnPs, sum(drawnPsT) as drawnPsT,
 		//	takenPs, sum(takenPsT) as takenPsT, gives, sum(givesT) as givesT, takes, sum(takesT) as takesT, blocks, sum(blocksT) as blocksT
 		
-		/*let gpTotal = <?php echo $gpTotal;?>;
-		let r_goals = <?php echo $radarData['goals'];?>;
+		let Phits = <?php echo $radarData['hits'];?>;
+		let Thits = <?php echo $radarData['hitsT'];?>;
+		let Phit = <?php echo $radarData['hit'];?>;
+		let Thit = <?php echo $radarData['hitT'];?>;
+		let Pgoals = <?php echo $radarData['goals'];?>;
+		let Tgoals = <?php echo $radarData['goalsT'];?>;
+		let Passists = <?php echo $radarData['assists'];?>;
+		let Tassists = <?php echo $radarData['assistsT'];?>;
+		let Pshots = <?php echo $radarData['shots'];?>;
+		let Tshots = <?php echo $radarData['shotsT'];?>;
+		let PdrawnPs = <?php echo $radarData['drawnPs'];?>;
+		let TdrawnPs = <?php echo $radarData['drawnPsT'];?>;
+		let PtakenPs = <?php echo $radarData['takenPs'];?>;
+		let TtakenPs = <?php echo $radarData['takenPsT'];?>;
+		let Pgives = <?php echo $radarData['gives'];?>;
+		let Tgives = <?php echo $radarData['givesT'];?>;
+		let Ptakes = <?php echo $radarData['takes'];?>;
+		let Ttakes = <?php echo $radarData['takesT'];?>;
+		let Pblocks = <?php echo $radarData['blocks'];?>;
+		let Tblocks = <?php echo $radarData['blocksT'];?>;
+		
 		
 		let spiderChartID = document.getElementById('spiderChart').getContext('2d');
      
         let spiderChart = new Chart(spiderChartID, {
             type: 'radar', //bar, horizontal bar, pie, line, donut, radar, polarArea
             data: {
-				labels: ['Goals', 'Takeaways', 'Drawn Penalties', 'Hits Received', 'Hits Made', 'Penalties', 'Giveaways', 'Assists', 'Shots', 'Shotblocks'],
+				labels: ['Goals', 'Takeaways', 'Drawn Penalties', 'Hits Received', 'Hits Made', 'Penalties', 'Giveaways', 'Shotblocks', 'Shots', 'Assists'],
 				datasets:[
 				{				
-					data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					data: [ Pgoals/Math.max(1, Tgoals), Ptakes/Math.max(1, Ttakes), PdrawnPs/Math.max(1, TdrawnPs), Phit/Math.max(1, Thit), Phits/Math.max(1, Thits),
+						PtakenPs/Math.max(TtakenPs), Pgives/Math.max(1, Tgives), Pblocks/Math.max(1, Tblocks), Pshots/Math.max(1, Tshots), Passists/Math.max(1, Tassists)],
 					backgroundColor:'rgba(255, 0, 0, 0.5)'
 				},{
-					data: [1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18, 1/18],
+					data: [1/13, 1/13, 1/13, 1/13, 1/13, 1/13, 1/13, 1/13, 1/13, 1/13],
 					backgroundColor:'rgba(100, 100, 100, 0.25)'
 				}]
             },
@@ -208,8 +232,7 @@
 				scale: {
 					ticks: {
 						display: false,
-						suggestedMin: 0.35,
-						suggestedMax: 0.65
+						suggestedMax: (1/7)
 					}
 				},
 				legend: {
@@ -220,10 +243,10 @@
                     text: 'Radar'
                 }
             }
-        });*/
+        });
 
 </script>
-<script>/*
+<script>
 	var heatmapInstance2 = h337.create({
 		container: document.getElementById('heatMap'),
 		radius: 14,
@@ -259,7 +282,7 @@
 	var heatmapInstance = h337.create({
 		container: document.getElementById('heatMap'),
 		radius: 14,
-		maxOpacity: 0.85,
+		maxOpacity: 0.9,
 		minOpacity: 0.01,
 		gradient: {
 			'.9': '#AA0000',
@@ -286,7 +309,7 @@
         max: 1,
 		data: dataPoints
 	};
-	heatmapInstance.setData(testData);*/
+	heatmapInstance.setData(testData);
 	
 </script>
 </html>
