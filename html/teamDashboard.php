@@ -63,9 +63,14 @@
 <body>
     <div class = "flexContainer">
         <div class = "sideNav">
-            <div class = "title"> 
-            
+            <div class = "sideNavRow"> 
+				<h2> TipFC </h2>
             </div>
+			<div class = "sideNavRow">
+				Menu
+				<hr id = "menuHR">
+				<a id = "linkPlayer" href = "http://99.79.32.21/playerDashboard.php"> Player Dashboard </a>
+			</div>
         </div>
         <div class = "informationNav">
             <div class = "topNav">
@@ -105,11 +110,11 @@
                         </div>
                         <div class = "graphCard">
                              <div class = "teamCardName">
-								Goals <input type = "radio" name = "graphType" value = "goals">
-								Shots<input type = "radio" name = "graphType" value = "shots">
-								PowerPlay <input type = "radio" name = "graphType" value = "powerplays">
-                             
-        
+								<div class = "buttonContainer">
+									Goals <input type = "radio" name = "graphType" value = "goals" onclick = "goalsGraph()">
+									Shots<input type = "radio" name = "graphType" value = "shots" onclick = "shotsGraph()">
+									PowerPlay <input type = "radio" name = "graphType" value = "powerplays" onclick = "ppGraph()">
+								</div>
                             </div>
                              
 							<canvas id = "myChart"> </canvas> 
@@ -121,7 +126,7 @@
 
                         <div class = "graphCard">
                             <div class = "teamCardName">
-							
+								<h3> Radar Chart </h3>
 							</div>
 							
 							<canvas id = "spiderChart"> </canvas>
@@ -156,6 +161,8 @@
 		let ppFor = <?php echo '["' . implode('", "', $ppFor) . '"]' ?>;
 		let ppAgainst = <?php echo '["' . implode('", "', $ppAgainst) . '"]' ?>;
 
+
+	function goalsGraph() {
         let myChart = document.getElementById('myChart').getContext('2d');
      
         let massChart = new Chart(myChart, {
@@ -180,7 +187,59 @@
                 }
             }
         });
-		
+	}
+
+	function shotsGraph() {
+		        let massChart = new Chart(myChart, {
+            type: 'line', //bar, horizontal bar, pie, line, donut, radar, polarArea
+            data: {
+				labels: date,
+				datasets:[
+				{
+					label: 'Shots For',
+					data: shotsFor,
+					backgroundColor:'rgba(255, 0, 0, 0.4)'},
+				{
+					label: 'Shots Against',
+					data:shotsAgainst,
+					backgroundColor: 'rgba(0,0,255,0.4'}
+				]
+            },
+            options: {
+                title: {
+                    display: true
+                }
+            }
+        });
+	}
+	
+	function ppGraph() {
+		let massChart = new Chart(myChart, {
+				type: 'line', //bar, horizontal bar, pie, line, donut, radar, polarArea
+				data: {
+					labels: date,
+					datasets:[
+					{
+						label: 'Powerplays',
+						data: ppFor,
+						backgroundColor:'rgba(255, 0, 0, 0.4)'},
+					{
+						label: 'Powerplays Given',
+						data:ppAgainst,
+						backgroundColor: 'rgba(0,0,255,0.4'}
+					]
+				},
+				options: {
+					title: {
+						display: true
+					}
+				}
+			});
+
+
+	}
+
+
 		
 		let gpTotal = <?php echo $gpTotal;?>;
 		let gTotal = <?php echo $gTotal;?> ;

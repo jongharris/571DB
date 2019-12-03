@@ -58,15 +58,21 @@
 <body>
     <div class = "flexContainer">
         <div class = "sideNav">
-            <div class = "title"> 
-            
+            <div class = "sideNavRow"> 
+				<h2> TipFC </h2>
             </div>
+			<div class = "sideNavRow">
+				Menu
+				<hr id = "menuHR">
+				<a id = "linkPlayer" href = "http://99.79.32.21/teamDashboard.php"> Team Dashboard </a>
+			</div>
+			
         </div>
         <div class = "informationNav">
             <div class = "topNav">
                <div class = "userForm">
-                   <form method = "post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player" style = "z-index: 10;"><input id = "searchBtn" type = "submit" value = "Search">
+                   <form method = "post" style = "z-index: 15;" action="<?php echo $_SERVER['PHP_SELF'];?>">
+                       <input id = "playerField" type = "text" name = "playerName" placeholder ="Enter Player" style = "z-index: 15;"><input id = "searchBtn" type = "submit" value = "Search">
                    </form>
                </div>
             </div>
@@ -120,15 +126,16 @@
 					
 					<br>
 					
-					<div class = "row" style = "z-index: 0">
-                        <div class="heatmapCard">
+					<div class = "row" >
+
+                        <div class="heatmapCard" style = "z-index: 0;">
                             <div class = "playerCardName">
                                 <h3> Goals Heat Map </h3>
                             </div>
                             <div id='heatMap' class="heatmap" name="playerGoals">
                                 <canvas width="480" height="204" style="position:absolute; left: 0; top: 0"></canvas>
                             </div> 
-                        </div>
+                        </div> 
                     </div>   
                      
                 </div>
