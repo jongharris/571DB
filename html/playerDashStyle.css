@@ -3,6 +3,7 @@
 }
 body {
     margin: 0;
+	height: 100vh;
 }
 .flexContainer {
     display: flex;
@@ -11,14 +12,38 @@ body {
 }
 
 .sideNav {
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	flex-flow: wrap;
+	align-content: flex-start;
+	font-family: arial;
     height: 100vh;
     width: 10%;
     background-color: #313A46;
-    width: 150px;
     left: 0;
 }
 
+.sideNavRow {
+	margin-bottom: 50px;
+	color: white;
+	height: 8%;
+	text-align: center;
+	width: 100%;
+}
+#menuHR {
+	width: 85%;
+	border-color: #6C6C6C;
+}
+
+#linkPlayer {
+	z-index: 10;
+	text-decoration: none;
+	color: white;
+	font-family: arial;
+}
 .topNav {
+	z-index: 10;
     width: 100%;
     height: 8%;
     display: flex;
@@ -42,6 +67,7 @@ body {
 
 .informationNav {
     display: flex;
+	height: 100vh;
     flex-direction: row;
     flex-flow: wrap;
     width: 90%;
@@ -94,7 +120,8 @@ body {
     flex-direction: row;
     flex-flow: wrap;
     align-content: flex-start;
-    height: 90%;
+   
+	height: 575px;
     width: 100%;
     margin-left: 50px;
 }
@@ -104,7 +131,7 @@ body {
     flex-direction: row;
     align-content: flex-start;
     width: 100%;
-    margin-bottom: 150px;
+    margin-bottom: 25px;
 }
 
 .playerCard {
@@ -119,6 +146,7 @@ body {
 }
 
 .playerCardName {
+	margin-top: 0;
     color: white;
     text-align: center; 
     background-color: #313A46;
@@ -139,20 +167,33 @@ body {
     color: #64696F;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     width: 480px;
+	margin-left: 0px;
 	
 }
 
 .heatmap{background-image: url(./hockey-rink-scaled.png);
+	z-index: 0;
 	height: 204px;
     width: 480px;
 }
 
 .graphCard {
+	display: flex;
+    justify-content: center; 
+    flex-flow: wrap;
     background-color: white;
-	width: 30%;
-    margin-left: 50px;
+   margin-left: 50px;
     height: 275px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    width: 30%;
     
 
+}
+
+.playerCardNameLineGraph {
+    color: white;
+    text-align: center; 
+    background-color: #313A46;
+    height: 60px;
+    width: 100%;
 }
