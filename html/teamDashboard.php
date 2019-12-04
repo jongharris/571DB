@@ -69,6 +69,9 @@
 			<div class = "sideNavRow">
 				Menu
 				<hr id = "menuHR">
+				<a id = "linkPlayer" href = "http://99.79.32.21/index.php"> Home </a>
+				<br>
+				<br>
 				<a id = "linkPlayer" href = "http://99.79.32.21/playerDashboard.php"> Player Dashboard </a>
 			</div>
         </div>
