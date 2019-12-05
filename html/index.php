@@ -16,7 +16,7 @@
                 <h1> Welcome to TipFC</h1>
                  <p id = "titleInfo"> An application designed by Andrew Kett and Jonathan Harris to display and analyze your favorite teams and players stat.</Harris></p>
                   <h2> Search by:        
-				<button id = "team" onclick="window.location.href = 'http://99.79.32.21/playerDashboard.php'">
+				<button id = "team" onclick="window.location.href = 'http://99.79.32.21/teamDashboard.php'">
                      Teams
                  </button> 
 
